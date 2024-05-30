@@ -31,11 +31,11 @@
                             height)))
     (make-ball width height velocity hitbox)))
 
-(define (draw-ball context ball)
-  (let ((x (rect-x (ball-hitbox ball)))
-        (y (rect-y (ball-hitbox ball)))
-        (w (ball-width ball))
-        (h (ball-height ball)))
-    (draw-image context image:ball
-                0 0 w h
-                x y w h)))
+;(define (draw-ball context ball)
+;  (let ((x (rect-x (ball-hitbox ball)))
+;        (y (rect-y (ball-hitbox ball)))
+;        (w (ball-width ball))
+;        (h (ball-height ball)))
+;    (draw-image context image:ball
+;                0 0 w h
+;                x y w h)))

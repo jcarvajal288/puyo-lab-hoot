@@ -5,27 +5,22 @@
   #:use-module (dom image)
   #:use-module (dom canvas)
   #:use-module (math)
+  #:use-module (images)
   #:use-module (screen)
   #:use-module (ball)
   #:export (draw-frame))
 
-(define (draw-with-rotation context image angle sx sy sw sh dx dy dw dh)
-  (let ((center-x (+ dx (/ dw 2)))
-        (center-y (+ dy (/ dh 2))))
-    (save context)
-    (translate! context center-x center-y) 
-    (rotate! context (to-radians angle))
-    (translate! context (- center-x) (- center-y))
-    (draw-image context image
-                sx sy sw sh
-                dx dy dw dh)
-    (restore! context)))
-
 (define (draw-background context)
-  (set-fill-color! context "#140c1c")
-  (fill-rect context 0.0 0.0 screen:width screen:height))
+  (draw-image context image:background
+              0 0 screen:width screen:height
+              0 0 screen:width screen:height))
+
+(define (draw-play-border context)
+  (draw-image context image:play-border
+              0 0 play-border-width play-border-height
+              100 68 play-border-width play-border-height))
 
 
 (define (draw-frame context ball prev-time)
   (draw-background context)
-  (draw-ball context ball))
+  (draw-play-border context))
