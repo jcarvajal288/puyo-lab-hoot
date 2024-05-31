@@ -14,18 +14,18 @@
         (draw)
         (images)
         (input)
-        (ball)
+        (playfield)
         (update))
 
-(define ball (build-ball screen:width screen:height))
+(define playfield (build-playfield))
 
 (define (update)
-  (update-all ball)
+  ;(update-all ball)
   (timeout update-callback screen:ms-per-frame))
 (define update-callback (procedure->external update))
 
 (define (draw prev-time)
-  (draw-frame context ball prev-time)
+  (draw-frame context playfield prev-time)
   (request-animation-frame draw-callback))
 (define draw-callback (procedure->external draw))
 

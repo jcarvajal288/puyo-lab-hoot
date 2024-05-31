@@ -4,15 +4,10 @@
   #:use-module (dom image)
   #:export (load-all-images
             image:background
-            image:play-border
-            play-border-width
-            play-border-height))
+            image:play-border))
 
 (define image:background #f)
 (define image:play-border #f)
-
-(define play-border-width 198.0)
-(define play-border-height 424.0)
 
 (define (load-all-images)
   (set! image:background (make-image "assets/images/chalkboard_800x600.jpg"))
