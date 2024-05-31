@@ -10,7 +10,7 @@
   #:use-module (math rect)
   #:use-module (math vector)
   #:use-module (dom window)
-  #:use-module (ball)
+  #:use-module (puyo)
   #:export (update-all))
 
 
@@ -19,5 +19,5 @@
   (set-rect-y! hitbox (+ (rect-y hitbox) (vec2-y velocity))))
 
 
-(define (update-all ball)
-  (move (ball-hitbox ball) (ball-velocity ball)))
+(define (update-all puyo)
+  (display 'x'))

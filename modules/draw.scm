@@ -18,4 +18,4 @@
 
 (define (draw-frame context playfield prev-time)
   (draw-background context)
-  (draw-play-border playfield context))
+  (draw-playfield context playfield))

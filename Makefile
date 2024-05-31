@@ -9,7 +9,7 @@ modules = \
 	modules/math.scm \
 	modules/math/rect.scm \
 	modules/math/vector.scm \
-	modules/stdlib/list.scm
+	modules/stdlib/list.scm 
 
 game.wasm: game.scm $(modules)
 	guild compile-wasm -L modules -o $@ $<
