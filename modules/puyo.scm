@@ -25,7 +25,10 @@
   (let* ((hitbox (make-rect x y puyo-size puyo-size)))
     (make-puyo color hitbox)))
 
-(define (draw-puyo context puyo x y)
-  (draw-image context image:puyo-sheet
-              3 4 puyo-size puyo-size
-              x y puyo-size puyo-size))
+(define (draw-puyo context puyo-color dx dy)
+  (let* ((sprite-sheet-coords (get-puyo-sprite-sheet-coords puyo-color))
+         (sx (car sprite-sheet-coords))
+         (sy (cdr sprite-sheet-coords)))
+    (draw-image context image:puyo-sheet
+                sx sy puyo-size puyo-size
+                dx dy puyo-size puyo-size)))
