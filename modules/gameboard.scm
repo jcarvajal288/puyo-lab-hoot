@@ -11,12 +11,14 @@
             draw-gameboard
             add-puyo-at))
 
-(define play-border-x 100.0)
-(define play-border-y 68.0)
+(define play-border-x 100)
+(define play-border-y 68)
 (define play-border-width 198.0)
 (define play-border-height 424.0)
 (define board-grid-width 6)
 (define board-grid-height 13)
+(define grid-origin-x (+ play-border-x 7))
+(define grid-origin-y (+ play-border-y 7))
 (define board-vector-length (* board-grid-width board-grid-height))
 
 (define-record-type <gameboard>
@@ -50,13 +52,15 @@
 
 (define (draw-grid context grid)
   (define (draw-grid-func context grid index)
-    (let* ((puyo-color (vector-ref grid index))
-           (x (floor-remainder index board-grid-width))
-           (y (floor-quotient index board-grid-width)))
+    (let ((puyo-color (vector-ref grid index)))
       (if (not (eqv? puyo-color #f))
-          (draw-puyo context puyo-color x y))
-      (if (< index (- board-vector-length 1))
-          (draw-grid-func context grid (+ index 1)))))
+          (let* ((grid-x (floor-remainder index board-grid-width))
+                 (grid-y (floor-quotient index board-grid-width))
+                 (screen-x (+ (* grid-x puyo-size) grid-origin-x))
+                 (screen-y (+ (* grid-y puyo-size) grid-origin-y)))
+          (draw-puyo context puyo-color screen-x screen-y)))
+    (if (< index (- board-vector-length 1))
+        (draw-grid-func context grid (+ index 1)))))
   (draw-grid-func context grid 0))
 
 

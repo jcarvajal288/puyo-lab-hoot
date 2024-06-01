@@ -6,7 +6,8 @@
   #:use-module (math rect)
   #:use-module (dom canvas)
   #:use-module (images)
-  #:export (puyo-color
+  #:export (puyo-size
+            puyo-color
             puyo-hitbox
             build-puyo
             draw-puyo))
@@ -27,4 +28,4 @@
 (define (draw-puyo context puyo x y)
   (draw-image context image:puyo-sheet
               3 4 puyo-size puyo-size
-              (* x puyo-size) (* y puyo-size) puyo-size puyo-size))
+              x y puyo-size puyo-size))
