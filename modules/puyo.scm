@@ -1,6 +1,7 @@
 (define-module (puyo)
   #:pure
   #:use-module (scheme base)
+  #:use-module (scheme write)
   #:use-module (math vector)
   #:use-module (math rect)
   #:use-module (dom canvas)
@@ -10,7 +11,7 @@
             build-puyo
             draw-puyo))
 
-(define puyo-size 32.0)
+(define puyo-size 32)
 
 
 (define-record-type <puyo>
@@ -23,12 +24,7 @@
   (let* ((hitbox (make-rect x y puyo-size puyo-size)))
     (make-puyo color hitbox)))
 
-(define (draw-puyo context puyo)
-  (let* ((hitbox (puyo-hitbox puyo))
-         (x (rect-x hitbox))
-         (y (rect-y hitbox))
-         (w (rect-width hitbox))
-         (h (rect-height hitbox)))
-    (draw-image context image:puyo-sheet
-                3 4 w h
-                x y w h)))
+(define (draw-puyo context puyo x y)
+  (draw-image context image:puyo-sheet
+              3 4 puyo-size puyo-size
+              (* x puyo-size) (* y puyo-size) puyo-size puyo-size))

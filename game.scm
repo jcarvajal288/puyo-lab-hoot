@@ -14,10 +14,14 @@
         (draw)
         (images)
         (input)
-        (playfield)
+        (gameboard)
         (update))
 
-(define playfield (build-playfield))
+(define gameboard (build-gameboard))
+(add-puyo-at gameboard 'red 0 0)
+(add-puyo-at gameboard 'red 2 0)
+(add-puyo-at gameboard 'red 0 5)
+(add-puyo-at gameboard 'red 3 6)
 
 (define (update)
   ;(update-all ball)
@@ -25,7 +29,7 @@
 (define update-callback (procedure->external update))
 
 (define (draw prev-time)
-  (draw-frame context playfield prev-time)
+  (draw-frame context gameboard prev-time)
   (request-animation-frame draw-callback))
 (define draw-callback (procedure->external draw))
 

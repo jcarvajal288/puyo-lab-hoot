@@ -7,7 +7,7 @@
   #:use-module (math)
   #:use-module (images)
   #:use-module (screen)
-  #:use-module (playfield)
+  #:use-module (gameboard)
   #:export (draw-frame))
 
 (define (draw-background context)
@@ -16,6 +16,6 @@
               0 0 screen:width screen:height))
 
 
-(define (draw-frame context playfield prev-time)
+(define (draw-frame context gameboard prev-time)
   (draw-background context)
-  (draw-playfield context playfield))
+  (draw-gameboard context gameboard))
