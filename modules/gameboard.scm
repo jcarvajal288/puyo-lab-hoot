@@ -13,12 +13,12 @@
 
 (define play-border-x 100)
 (define play-border-y 68)
-(define play-border-width 198.0)
-(define play-border-height 424.0)
+(define play-border-width 212.0)
+(define play-border-height 432.0)
 (define board-grid-width 6)
 (define board-grid-height 13)
-(define grid-origin-x (+ play-border-x 7))
-(define grid-origin-y (+ play-border-y 7))
+(define grid-origin-x (+ play-border-x 9))
+(define grid-origin-y (+ play-border-y 8))
 (define board-vector-length (* board-grid-width board-grid-height))
 
 (define-record-type <gameboard>
