@@ -1,7 +1,7 @@
 (define-module (screen)
   #:pure
   #:use-module (scheme base)
-  #:export (screen:width screen:height screen:ms-per-frame))
+  #:export (screen:width screen:height screen:refresh-rate screen:ms-per-frame))
 
 (define screen:width 800.0)
 (define screen:height 600.0)

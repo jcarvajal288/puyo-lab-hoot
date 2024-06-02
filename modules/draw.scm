@@ -11,12 +11,9 @@
   #:export (draw-frame))
 
 (define (draw-background context)
-  ;; (set-fill-color! context "#000000")
-  ;; (fill-rect context 0.0 0.0 800.0 600.0)
   (draw-image context image:background
               0 0 screen:width screen:height
-              0 0 screen:width screen:height)
-  )
+              0 0 screen:width screen:height))
 
 
 
