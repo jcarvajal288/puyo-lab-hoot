@@ -2,6 +2,7 @@
   #:pure
   #:use-module (scheme base)
   #:use-module (scheme write)
+  #:use-module (hoot match)
   #:use-module (math vector)
   #:use-module (math rect)
   #:use-module (dom canvas)

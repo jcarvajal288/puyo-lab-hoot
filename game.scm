@@ -78,8 +78,8 @@
 (set-element-height! canvas (exact screen:height))
 (add-event-listener! (current-document) "keydown"
                      (procedure->external on-key-down))
-(add-event-listener! (current-document) "keyup"
-                     (procedure->external on-key-up))
+;; (add-event-listener! (current-document) "keyup"
+;;                      (procedure->external on-key-up))
 
 (request-animation-frame draw-callback)
 (timeout update-callback screen:ms-per-frame)

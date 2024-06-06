@@ -2,6 +2,7 @@
   #:pure
   #:use-module (scheme base)
   #:use-module (scheme write)
+  #:use-module (hoot match)
   #:use-module (dom image)
   #:use-module (dom canvas)
   #:use-module (math)
@@ -9,7 +10,8 @@
   #:use-module (puyo)
   #:export (build-gameboard
             draw-gameboard
-            add-puyo-at))
+            add-puyo-at
+            move-active-pair!))
 
 (define play-border-x 100)
 (define play-border-y 68)
@@ -81,3 +83,30 @@
   (draw-play-border context gameboard)
   (draw-grid context (gameboard-grid gameboard))
   (draw-active-pair context))
+
+(define (move-active-pair! direction)
+  (let* ((index1 (puyo-pair-board-index1 active-pair))
+         (index2 (puyo-pair-board-index2 active-pair))
+         (color1 (puyo-pair-color1 active-pair))
+         (color2 (puyo-pair-color2 active-pair))
+         (new-indices (match direction
+                        ('left (move-active-pair-left index1 index2))
+                        ('right (move-active-pair-right index1 index2)))))
+                        ;; ('up (move-active-pair-up index1 index2))
+                        ;; ('down (move-active-pair-down index1 index2))))))
+    (new-puyo-pair! (car new-indices) (cdr new-indices) color1 color2)))
+
+(define (move-active-pair-left s1 s2)
+  (let ((d1 (- s1 1))
+        (d2 (- s2 1)))
+    (if (and (on-same-level? s1 d1) (on-same-level? s2 d2))
+        (cons d1 d2))))
+
+(define (move-active-pair-right s1 s2)
+  (let ((d1 (+ s1 1))
+        (d2 (+ s2 1)))
+    (if (and (on-same-level? s1 d1) (on-same-level? s2 d2))
+        (cons d1 d2))))
+
+(define (on-same-level? s d)
+  (= (floor/ s board-grid-width) (floor/ d board-grid-width)))
