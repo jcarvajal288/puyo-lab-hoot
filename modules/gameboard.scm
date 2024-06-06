@@ -50,22 +50,34 @@
               0 0 play-border-width play-border-height
               play-border-x play-border-y play-border-width play-border-height))
 
+(define (draw-puyo-at-board-index context index puyo-color)
+  (let* ((grid-x (floor-remainder index board-grid-width))
+          (grid-y (floor-quotient index board-grid-width))
+          (screen-x (+ (* grid-x puyo-size) grid-origin-x))
+          (screen-y (+ (* grid-y puyo-size) grid-origin-y)))
+    (draw-puyo context puyo-color screen-x screen-y)))
+
 (define (draw-grid context grid)
   (define (draw-grid-func context grid index)
     (let ((puyo-color (vector-ref grid index)))
       (if (not (eqv? puyo-color #f))
-          (let* ((grid-x (floor-remainder index board-grid-width))
-                 (grid-y (floor-quotient index board-grid-width))
-                 (screen-x (+ (* grid-x puyo-size) grid-origin-x))
-                 (screen-y (+ (* grid-y puyo-size) grid-origin-y)))
-          (draw-puyo context puyo-color screen-x screen-y)))
+        (draw-puyo-at-board-index context index puyo-color))
     (if (< index (- board-vector-length 1))
         (draw-grid-func context grid (+ index 1)))))
   (draw-grid-func context grid 0))
 
+(define (draw-active-pair context)
+  (draw-puyo-at-board-index
+    context
+    (puyo-pair-board-index1 active-pair)
+    (puyo-pair-color1 active-pair))
+  (draw-puyo-at-board-index
+    context
+    (puyo-pair-board-index2 active-pair)
+    (puyo-pair-color2 active-pair)))
+
 
 (define (draw-gameboard context gameboard)
   (draw-play-border context gameboard)
-  (draw-grid context (gameboard-grid gameboard)))
-
-
+  (draw-grid context (gameboard-grid gameboard))
+  (draw-active-pair context))

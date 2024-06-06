@@ -10,9 +10,17 @@
             puyo-color
             puyo-hitbox
             build-puyo
-            draw-puyo))
+            draw-puyo
+            active-pair
+            puyo-pair-board-index1
+            puyo-pair-board-index2
+            puyo-pair-color1
+            puyo-pair-color2
+            new-puyo-pair!))
 
 (define puyo-size 32)
+
+(define active-pair #f)
 
 
 (define-record-type <puyo>
@@ -20,6 +28,14 @@
   puyo?
   (color puyo-color)
   (hitbox puyo-hitbox))
+
+(define-record-type <puyo-pair>
+  (make-puyo-pair board-index1 board-index2 color1 color2)
+  puyo-pair?
+  (board-index1 puyo-pair-board-index1)
+  (board-index2 puyo-pair-board-index2)
+  (color1 puyo-pair-color1)
+  (color2 puyo-pair-color2))
 
 (define (build-puyo color x y)
   (let* ((hitbox (make-rect x y puyo-size puyo-size)))
@@ -32,3 +48,6 @@
     (draw-image context image:puyo-sheet
                 sx sy puyo-size puyo-size
                 dx dy puyo-size puyo-size)))
+
+(define (new-puyo-pair! board-index1 board-index2 color1 color2)
+  (set! active-pair (make-puyo-pair board-index1 board-index2 color1 color2)))
