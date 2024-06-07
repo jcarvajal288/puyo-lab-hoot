@@ -9,6 +9,7 @@
   #:use-module (images)
   #:use-module (puyo)
   #:export (build-gameboard
+            set-gameboard!
             draw-gameboard
             add-puyo-at
             move-active-pair!))
@@ -23,6 +24,8 @@
 (define grid-origin-y (+ play-border-y 8))
 (define board-vector-length (* board-grid-width board-grid-height))
 
+(define gameboard #f)
+
 (define-record-type <gameboard>
   (make-gameboard origin-x origin-y grid)
   gameboard?
@@ -32,7 +35,10 @@
 
 (define (build-gameboard)
   (let ((grid (make-vector board-vector-length #f)))
-  (make-gameboard play-border-x play-border-y grid)))
+    (make-gameboard play-border-x play-border-y grid)))
+
+(define (set-gameboard! board)
+  (set! gameboard board))
 
 
 (define (grid-index x y)
@@ -99,26 +105,41 @@
 (define (move-active-pair-left s1 s2)
   (let ((d1 (- s1 1))
         (d2 (- s2 1)))
-    (if (and (on-same-level? s1 d1) (on-same-level? s2 d2))
+    (if (and (on-same-level? s1 d1)
+             (on-same-level? s2 d2)
+             (space-empty? d1)
+             (space-empty? d2))
         (cons d1 d2))))
 
 (define (move-active-pair-right s1 s2)
   (let ((d1 (+ s1 1))
         (d2 (+ s2 1)))
-    (if (and (on-same-level? s1 d1) (on-same-level? s2 d2))
+    (if (and (on-same-level? s1 d1)
+             (on-same-level? s2 d2)
+             (space-empty? d1)
+             (space-empty? d2))
         (cons d1 d2))))
 
 (define (move-active-pair-up s1 s2)
   (let ((d1 (- s1 board-grid-width))
         (d2 (- s2 board-grid-width)))
-    (if (and (>= d1 0) (>= d2 0))
+    (if (and (>= d1 0)
+             (>= d2 0)
+             (space-empty? d1)
+             (space-empty? d2))
         (cons d1 d2))))
 
 (define (move-active-pair-down s1 s2)
   (let ((d1 (+ s1 board-grid-width))
         (d2 (+ s2 board-grid-width)))
-    (if (and (< d2 board-vector-length) (< d2 board-vector-length))
+    (if (and (< d2 board-vector-length)
+             (< d2 board-vector-length)
+             (space-empty? d1)
+             (space-empty? d2))
         (cons d1 d2))))
+
+(define (space-empty? index)
+  (eqv? (vector-ref (gameboard-grid gameboard) index) #f))
 
 (define (on-same-level? s d)
   (= (floor/ s board-grid-width) (floor/ d board-grid-width)))
