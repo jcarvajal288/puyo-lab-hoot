@@ -91,9 +91,9 @@
          (color2 (puyo-pair-color2 active-pair))
          (new-indices (match direction
                         ('left (move-active-pair-left index1 index2))
-                        ('right (move-active-pair-right index1 index2)))))
-                        ;; ('up (move-active-pair-up index1 index2))
-                        ;; ('down (move-active-pair-down index1 index2))))))
+                        ('right (move-active-pair-right index1 index2))
+                        ('up (move-active-pair-up index1 index2))
+                        ('down (move-active-pair-down index1 index2)))))
     (new-puyo-pair! (car new-indices) (cdr new-indices) color1 color2)))
 
 (define (move-active-pair-left s1 s2)
@@ -106,6 +106,18 @@
   (let ((d1 (+ s1 1))
         (d2 (+ s2 1)))
     (if (and (on-same-level? s1 d1) (on-same-level? s2 d2))
+        (cons d1 d2))))
+
+(define (move-active-pair-up s1 s2)
+  (let ((d1 (- s1 board-grid-width))
+        (d2 (- s2 board-grid-width)))
+    (if (and (>= d1 0) (>= d2 0))
+        (cons d1 d2))))
+
+(define (move-active-pair-down s1 s2)
+  (let ((d1 (+ s1 board-grid-width))
+        (d2 (+ s2 board-grid-width)))
+    (if (and (< d2 board-vector-length) (< d2 board-vector-length))
         (cons d1 d2))))
 
 (define (on-same-level? s d)

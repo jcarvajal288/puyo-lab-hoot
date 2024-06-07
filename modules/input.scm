@@ -18,8 +18,8 @@
   (let ((key (keyboard-event-code event)))
     (cond ((string=? key key:left)  (move-active-pair! 'left))
           ((string=? key key:right) (move-active-pair! 'right))
-          ((string=? key key:up)    (move-active-pair! 'left))
-          ((string=? key key:down)  (move-active-pair! 'right)))))
+          ((string=? key key:up)    (move-active-pair! 'up))
+          ((string=? key key:down)  (move-active-pair! 'down)))))
 
 ;; (define (on-key-up event)
 ;;   (let ((key (keyboard-event-code event)))
