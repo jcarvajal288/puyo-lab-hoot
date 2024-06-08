@@ -20,12 +20,10 @@
             set-puyo-pair-board-index2!
             puyo-pair-color1
             puyo-pair-color2
-            new-puyo-pair!))
+            new-puyo-pair!
+            random-puyo-color))
 
 (define puyo-size 32)
-
-(define active-pair #f)
-
 
 (define-record-type <puyo>
   (make-puyo color hitbox)
@@ -53,8 +51,8 @@
                 sx sy puyo-size puyo-size
                 dx dy puyo-size puyo-size)))
 
-(define (new-puyo-pair!)
-  (set! active-pair (make-puyo-pair 1 2 (random-puyo-color) (random-puyo-color))))
+(define (new-puyo-pair)
+  (make-puyo-pair 1 2 (random-puyo-color) (random-puyo-color)))
 
 (define (random-puyo-color)
   (let ((color (random-float 0 6)))

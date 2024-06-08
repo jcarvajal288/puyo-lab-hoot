@@ -16,7 +16,6 @@
               0 0 screen:width screen:height))
 
 
-
-(define (draw-frame context gameboard prev-time)
+(define (draw-frame context prev-time)
   (draw-background context)
-  (draw-gameboard context gameboard))
+  (draw-gameboard context))

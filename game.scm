@@ -10,16 +10,16 @@
         (dom element)
         (dom event)
         (dom window)
-        (screen)
         (draw)
+        (gameboard)
+        (gamestate)
         (images)
         (input)
-        (gameboard)
         (puyo)
+        (screen)
         (update))
 
-(define gameboard (build-gameboard))
-(new-puyo-pair!)
+(initialize-game-state board-vector-length)
 ;; (add-puyo-at gameboard 'red 0 0)
 ;; (add-puyo-at gameboard 'green 1 0)
 ;; (add-puyo-at gameboard 'yellow 2 0)
@@ -58,15 +58,13 @@
 ;; (add-puyo-at gameboard 'red 5 11)
 ;; (add-puyo-at gameboard 'red 5 12)
 
-(set-gameboard! gameboard)
-
 (define (update)
   ;(update-all ball)
   (timeout update-callback screen:ms-per-frame))
 (define update-callback (procedure->external update))
 
 (define (draw prev-time)
-  (draw-frame context gameboard prev-time)
+  (draw-frame context prev-time)
   (request-animation-frame draw-callback))
 (define draw-callback (procedure->external draw))
 
