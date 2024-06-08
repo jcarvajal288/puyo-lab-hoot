@@ -53,8 +53,8 @@
                 sx sy puyo-size puyo-size
                 dx dy puyo-size puyo-size)))
 
-(define (new-puyo-pair! board-index1 board-index2)
-  (set! active-pair (make-puyo-pair board-index1 board-index2 (random-puyo-color) (random-puyo-color))))
+(define (new-puyo-pair!)
+  (set! active-pair (make-puyo-pair 1 2 (random-puyo-color) (random-puyo-color))))
 
 (define (random-puyo-color)
   (let ((color (random-float 0 6)))
