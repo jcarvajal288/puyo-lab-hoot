@@ -19,7 +19,7 @@
         (update))
 
 (define gameboard (build-gameboard))
-(new-puyo-pair! 1 2 'blue 'green)
+(new-puyo-pair! 1 2)
 ;; (add-puyo-at gameboard 'red 0 0)
 ;; (add-puyo-at gameboard 'green 1 0)
 ;; (add-puyo-at gameboard 'yellow 2 0)

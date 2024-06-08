@@ -100,7 +100,8 @@
                         ('right (move-active-pair-right index1 index2))
                         ('up (move-active-pair-up index1 index2))
                         ('down (move-active-pair-down index1 index2)))))
-    (new-puyo-pair! (car new-indices) (cdr new-indices) color1 color2)))
+    (set-puyo-pair-board-index1! active-pair (car new-indices))
+    (set-puyo-pair-board-index2! active-pair (cdr new-indices))))
 
 (define (move-active-pair-left s1 s2)
   (let ((d1 (- s1 1))
@@ -109,7 +110,8 @@
              (on-same-level? s2 d2)
              (space-empty? d1)
              (space-empty? d2))
-        (cons d1 d2))))
+        (cons d1 d2)
+        (cons s1 s2))))
 
 (define (move-active-pair-right s1 s2)
   (let ((d1 (+ s1 1))
@@ -118,7 +120,8 @@
              (on-same-level? s2 d2)
              (space-empty? d1)
              (space-empty? d2))
-        (cons d1 d2))))
+        (cons d1 d2)
+        (cons s1 s2))))
 
 (define (move-active-pair-up s1 s2)
   (let ((d1 (- s1 board-grid-width))
@@ -127,7 +130,8 @@
              (>= d2 0)
              (space-empty? d1)
              (space-empty? d2))
-        (cons d1 d2))))
+        (cons d1 d2)
+        (cons s1 s2))))
 
 (define (move-active-pair-down s1 s2)
   (let ((d1 (+ s1 board-grid-width))
@@ -136,7 +140,8 @@
              (< d2 board-vector-length)
              (space-empty? d1)
              (space-empty? d2))
-        (cons d1 d2))))
+        (cons d1 d2)
+        (cons s1 s2))))
 
 (define (space-empty? index)
   (eqv? (vector-ref (gameboard-grid gameboard) index) #f))

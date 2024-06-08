@@ -3,6 +3,7 @@
   #:use-module (scheme base)
   #:use-module (scheme write)
   #:use-module (hoot match)
+  #:use-module (math)
   #:use-module (math vector)
   #:use-module (math rect)
   #:use-module (dom canvas)
@@ -15,6 +16,8 @@
             active-pair
             puyo-pair-board-index1
             puyo-pair-board-index2
+            set-puyo-pair-board-index1!
+            set-puyo-pair-board-index2!
             puyo-pair-color1
             puyo-pair-color2
             new-puyo-pair!))
@@ -33,8 +36,8 @@
 (define-record-type <puyo-pair>
   (make-puyo-pair board-index1 board-index2 color1 color2)
   puyo-pair?
-  (board-index1 puyo-pair-board-index1)
-  (board-index2 puyo-pair-board-index2)
+  (board-index1 puyo-pair-board-index1 set-puyo-pair-board-index1!)
+  (board-index2 puyo-pair-board-index2 set-puyo-pair-board-index2!)
   (color1 puyo-pair-color1)
   (color2 puyo-pair-color2))
 
@@ -50,5 +53,14 @@
                 sx sy puyo-size puyo-size
                 dx dy puyo-size puyo-size)))
 
-(define (new-puyo-pair! board-index1 board-index2 color1 color2)
-  (set! active-pair (make-puyo-pair board-index1 board-index2 color1 color2)))
+(define (new-puyo-pair! board-index1 board-index2)
+  (set! active-pair (make-puyo-pair board-index1 board-index2 (random-puyo-color) (random-puyo-color))))
+
+(define (random-puyo-color)
+  (let ((color (random-float 0 6)))
+    (cond
+      ((< color 1) 'red)
+      ((< color 2) 'green)
+      ((< color 3) 'yellow)
+      ((< color 4) 'blue)
+      (else 'purple))))
