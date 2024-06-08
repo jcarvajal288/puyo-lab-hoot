@@ -34,7 +34,7 @@
   (grid gameboard-grid))
 
 (define (build-gameboard)
-  (let ((grid (make-vector board-vector-length #f)))
+  (let ((grid (make-vector board-vector-length 'empty)))
     (make-gameboard play-border-x play-border-y grid)))
 
 (define (set-gameboard! board)
@@ -68,7 +68,7 @@
 (define (draw-grid context grid)
   (define (draw-grid-func context grid index)
     (let ((puyo-color (vector-ref grid index)))
-      (if (not (eqv? puyo-color #f))
+      (if (not (eqv? puyo-color 'empty))
         (draw-puyo-at-board-index context index puyo-color))
     (if (< index (- board-vector-length 1))
         (draw-grid-func context grid (+ index 1)))))
@@ -95,16 +95,16 @@
          (index2 (puyo-pair-board-index2 active-pair))
          (color1 (puyo-pair-color1 active-pair))
          (color2 (puyo-pair-color2 active-pair))
-         (new-indices (match direction
+         (move-result (match direction
                         ('left (move-active-pair-left index1 index2))
                         ('right (move-active-pair-right index1 index2))
                         ('up (move-active-pair-up index1 index2))
                         ('down (move-active-pair-down index1 index2)))))
-    (if (eqv? new-indices 'stick-pair)
+    (if (eqv? move-result 'stick-pair)
         (stick-pair)
         (begin
-          (set-puyo-pair-board-index1! active-pair (car new-indices))
-          (set-puyo-pair-board-index2! active-pair (cdr new-indices))))))
+          (set-puyo-pair-board-index1! active-pair (car move-result))
+          (set-puyo-pair-board-index2! active-pair (cdr move-result))))))
 
 (define (move-active-pair-left s1 s2)
   (let ((d1 (- s1 1))
@@ -147,7 +147,7 @@
         'stick-pair)))
 
 (define (space-empty? index)
-  (eqv? (vector-ref (gameboard-grid gameboard) index) #f))
+  (eqv? (vector-ref (gameboard-grid gameboard) index) 'empty))
 
 (define (on-same-level? s d)
   (= (floor/ s board-grid-width) (floor/ d board-grid-width)))
