@@ -150,7 +150,9 @@
                 (if (< s1 s2)
                     (rotate-down-to-right)
                     (rotate-up-to-left)))))
-    (cons s1 d2)))
+    (if (space-empty? d2)
+        (cons s1 d2)
+        (cons s1 s2))))
 
 (define (rotate-active-pair-clockwise s1 s2)
   (define (rotate-right-to-down)
@@ -172,7 +174,9 @@
                 (if (< s1 s2)
                     (rotate-down-to-left)
                     (rotate-up-to-right)))))
-    (cons s1 d2)))
+    (if (space-empty? d2)
+        (cons s1 d2)
+        (cons s1 s2))))
 
 
 
