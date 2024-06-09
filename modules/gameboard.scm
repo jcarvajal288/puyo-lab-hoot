@@ -123,7 +123,7 @@
 (define (move-active-pair-down s1 s2)
   (let ((d1 (+ s1 board-grid-width))
         (d2 (+ s2 board-grid-width)))
-    (if (and (< d2 board-vector-length)
+    (if (and (< d1 board-vector-length)
              (< d2 board-vector-length)
              (space-empty? d1)
              (space-empty? d2))
