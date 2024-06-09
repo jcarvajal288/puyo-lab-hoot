@@ -8,7 +8,8 @@
             active-pair-index2
             get-active-pair
             set-active-pair-location!
-            new-active-pair!))
+            new-active-pair!
+            add-new-board-state))
 
 (define current-state 0)
 (define grid-timeline #f)
@@ -34,6 +35,20 @@
   (set! active-pair-index2 (cdr new-location)))
 
 (define (new-active-pair!)
-  (vector-set! pair-timeline 0 (cons (random-puyo-color) (random-puyo-color)))
-  (set! active-pair-index1 1)
-  (set! active-pair-index2 2))
+  (let ((new-pair (cons (random-puyo-color) (random-puyo-color))))
+    (set! pair-timeline (vector-append pair-timeline (vector new-pair)))
+    (set! active-pair-index1 1)
+    (set! active-pair-index2 2)))
+
+(define (update-board!)
+  (let ((new-board (vector-copy (get-game-grid)))
+        (color1 (car (get-active-pair)))
+        (color2 (cdr (get-active-pair))))
+    (vector-set! new-board active-pair-index1 color1)
+    (vector-set! new-board active-pair-index2 color2)
+    (set! grid-timeline (vector-append grid-timeline (vector new-board)))))
+
+(define (add-new-board-state)
+  (update-board!)
+  (new-active-pair!)
+  (set! current-state (+ current-state 1)))

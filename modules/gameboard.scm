@@ -33,6 +33,7 @@
   (let ((target-index (grid-index x y)))
     (vector-ref (get-game-grid) target-index)))
 
+;; deprecated; kept around for testing
 (define (add-puyo-at puyo-color x y)
   (let ((target-index (grid-index x y)))
     (vector-set! (get-game-grid) target-index puyo-color)))
@@ -84,7 +85,7 @@
                         ('up (move-active-pair-up i1 i2))
                         ('down (move-active-pair-down i1 i2)))))
     (if (eqv? move-result 'stick-pair)
-        (stick-pair)
+        (add-new-board-state)
         (set-active-pair-location! move-result))))
 
 (define (move-active-pair-left s1 s2)
@@ -133,9 +134,3 @@
 (define (on-same-level? s d)
   (= (floor/ s board-grid-width) (floor/ d board-grid-width)))
 
-(define (stick-pair)
-  (let ((color1 (car (get-active-pair)))
-        (color2 (cdr (get-active-pair))))
-    (vector-set! (get-game-grid) active-pair-index1 color1)
-    (vector-set! (get-game-grid) active-pair-index2 color2)
-    (new-active-pair!)))
