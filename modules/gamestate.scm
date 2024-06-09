@@ -3,6 +3,7 @@
   #:use-module (scheme base)
   #:use-module (puyo)
   #:export (initialize-game-state
+            revert-board-state!
             get-game-grid
             active-pair-index1
             active-pair-index2
@@ -24,6 +25,12 @@
   (set! grid-timeline (make-vector 1 (make-vector grid-length 'empty)))
   (set! pair-timeline (make-vector 1 (cons (random-puyo-color) (random-puyo-color)))))
 
+(define (revert-board-state!)
+  (if (> current-state 0)
+      (set! current-state (- current-state 1)))
+  (set! active-pair-index1 1)
+  (set! active-pair-index2 2))
+
 (define (get-game-grid)
   (vector-ref grid-timeline current-state))
 
@@ -42,11 +49,12 @@
 
 (define (update-board!)
   (let ((new-board (vector-copy (get-game-grid)))
+        (previous-boards (vector-copy grid-timeline 0 (+ current-state 1)))
         (color1 (car (get-active-pair)))
         (color2 (cdr (get-active-pair))))
     (vector-set! new-board active-pair-index1 color1)
     (vector-set! new-board active-pair-index2 color2)
-    (set! grid-timeline (vector-append grid-timeline (vector new-board)))))
+    (set! grid-timeline (vector-append previous-boards (vector new-board)))))
 
 (define (add-new-board-state)
   (update-board!)
