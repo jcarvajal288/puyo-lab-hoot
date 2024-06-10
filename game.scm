@@ -59,7 +59,8 @@
 ;; (add-puyo-at gameboard 'red 5 12)
 
 (define (update)
-  ;(update-all ball)
+  (if (eqv? current-game-mode 'evaluating)
+      (progress-evaluation!))
   (timeout update-callback screen:ms-per-frame))
 (define update-callback (procedure->external update))
 

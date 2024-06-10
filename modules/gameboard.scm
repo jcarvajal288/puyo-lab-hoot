@@ -9,6 +9,7 @@
   #:use-module (math)
   #:use-module (images)
   #:use-module (puyo)
+  #:use-module (update)
   #:export (build-gameboard
             board-vector-length
             set-gameboard!
@@ -77,18 +78,19 @@
   (draw-active-pair context))
 
 (define (move-active-pair! direction)
-  (let* ((i1 active-pair-index1)
-         (i2 active-pair-index2)
-         (move-result (match direction
-                        ('left (move-active-pair-left i1 i2))
-                        ('right (move-active-pair-right i1 i2))
-                        ('up (move-active-pair-up i1 i2))
-                        ('down (move-active-pair-down i1 i2))
-                        ('counter-clockwise (rotate-active-pair-counter-clockwise i1 i2))
-                        ('clockwise (rotate-active-pair-clockwise i1 i2)))))
-    (if (eqv? move-result 'stick-pair)
-        (add-new-board-state)
-        (set-active-pair-location! move-result))))
+  (if (eqv? current-game-mode 'moving)
+    (let* ((i1 active-pair-index1)
+          (i2 active-pair-index2)
+          (move-result (match direction
+                          ('left (move-active-pair-left i1 i2))
+                          ('right (move-active-pair-right i1 i2))
+                          ('up (move-active-pair-up i1 i2))
+                          ('down (move-active-pair-down i1 i2))
+                          ('counter-clockwise (rotate-active-pair-counter-clockwise i1 i2))
+                          ('clockwise (rotate-active-pair-clockwise i1 i2)))))
+      (if (eqv? move-result 'stick-pair)
+          (start-board-evaluation!)
+          (set-active-pair-location! move-result)))))
 
 (define (move-active-pair-left s1 s2)
   (let ((d1 (- s1 1))

@@ -4,14 +4,16 @@
   #:use-module (puyo)
   #:export (initialize-game-state
             revert-board-state!
+            current-game-mode
+            switch-game-mode!
             get-game-grid
             active-pair-index1
             active-pair-index2
             get-active-pair
             set-active-pair-location!
-            new-active-pair!
-            add-new-board-state))
+            add-new-board-state!))
 
+(define current-game-mode 'moving)
 (define current-state 0)
 (define grid-timeline #f)
 (define pair-timeline #f)
@@ -30,6 +32,9 @@
       (set! current-state (- current-state 1)))
   (set! active-pair-index1 1)
   (set! active-pair-index2 2))
+
+(define (switch-game-mode! game-mode)
+  (set! current-game-mode game-mode))
 
 (define (get-game-grid)
   (vector-ref grid-timeline current-state))
@@ -56,7 +61,7 @@
     (vector-set! new-board active-pair-index2 color2)
     (set! grid-timeline (vector-append previous-boards (vector new-board)))))
 
-(define (add-new-board-state)
+(define (add-new-board-state!)
   (update-board!)
   (new-active-pair!)
   (set! current-state (+ current-state 1)))
