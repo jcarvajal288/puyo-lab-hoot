@@ -15,6 +15,7 @@
             set-gameboard!
             draw-gameboard
             add-puyo-at
+            remove-puyo-at
             on-same-level?
             space-empty?
             floating-puyo?))
@@ -39,6 +40,9 @@
 (define (add-puyo-at puyo-color x y)
   (let ((target-index (grid-index x y)))
     (vector-set! (get-game-grid) target-index puyo-color)))
+
+(define (remove-puyo-at index)
+  (vector-set! (get-game-grid) index 'empty))
 
 
 (define (draw-play-border context)

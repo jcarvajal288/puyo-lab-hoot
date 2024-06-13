@@ -19,8 +19,9 @@
 
 
 (define (find-floating-puyos)
-  (let ((board-indices (range 0 board-vector-length)))
-    (filter floating-puyo? board-indices)))
+  (let* ((board-indices (range 0 board-vector-length))
+         (floating-puyo-indices (filter floating-puyo? board-indices)))
+    (for-each remove-puyo-at floating-puyo-indices)))
 
 (define (start-board-evaluation!)
   (add-new-board-state!)
@@ -29,7 +30,4 @@
 
 
 (define (progress-evaluation!)
-  (display (length floating-puyos))
-  (newline)
-  (flush-output-port)
   (switch-game-mode! 'moving))
