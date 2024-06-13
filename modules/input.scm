@@ -5,8 +5,8 @@
   #:use-module (hoot ffi)
   #:use-module (dom event)
   #:use-module (math vector)
-  #:use-module (gameboard)
   #:use-module (gamestate)
+  #:use-module (move)
   #:export (on-key-down))
 
 (define key:up "ArrowUp")
