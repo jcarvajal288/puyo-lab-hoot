@@ -15,6 +15,7 @@
             set-gameboard!
             draw-gameboard
             add-puyo-at
+            create-puyo-sprite-at
             remove-puyo-at
             on-same-level?
             space-empty?
@@ -32,6 +33,13 @@
 
 (define (grid-index x y)
   (+ x (* y board-grid-width)))
+
+(define (grid-index-to-screen-coords index)
+  (let* ((grid-x (floor-remainder index board-grid-width))
+         (grid-y (floor-quotient index board-grid-width))
+         (screen-x (+ (* grid-x puyo-size) grid-origin-x))
+         (screen-y (+ (* grid-y puyo-size) grid-origin-y)))
+    (cons screen-x screen-y)))
 
 (define (get-puyo-at i)
   (vector-ref (get-game-grid) i))
@@ -51,11 +59,8 @@
               play-border-x play-border-y play-border-width play-border-height))
 
 (define (draw-puyo-at-board-index context index puyo-color)
-  (let* ((grid-x (floor-remainder index board-grid-width))
-          (grid-y (floor-quotient index board-grid-width))
-          (screen-x (+ (* grid-x puyo-size) grid-origin-x))
-          (screen-y (+ (* grid-y puyo-size) grid-origin-y)))
-    (draw-puyo context puyo-color screen-x screen-y)))
+  (let ((screen-coords (grid-index-to-screen-coords index)))
+    (draw-puyo context puyo-color (car screen-coords) (cdr screen-coords))))
 
 (define (draw-grid context)
   (define (draw-grid-func context grid index)
@@ -93,3 +98,8 @@
     (and (not (eqv? (get-puyo-at index) 'empty))
          (< space-below board-vector-length)
          (space-empty? space-below))))
+
+(define (create-puyo-sprite-at index)
+  (let ((screen-coords (grid-index-to-screen-coords index))
+        (color (vector-ref (get-game-grid) index)))
+    (build-puyo color (car screen-coords) (cdr screen-coords))))

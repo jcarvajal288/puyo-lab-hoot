@@ -18,14 +18,15 @@
   (set-rect-y! hitbox (+ (rect-y hitbox) (vec2-y velocity))))
 
 
-(define (find-floating-puyos)
+(define (set-floating-puyos!)
   (let* ((board-indices (range 0 board-vector-length))
          (floating-puyo-indices (filter floating-puyo? board-indices)))
-    (for-each remove-puyo-at floating-puyo-indices)))
+    (for-each remove-puyo-at floating-puyo-indices)
+    (set! floating-puyos (map create-puyo-sprite-at floating-puyo-indices))))
 
 (define (start-board-evaluation!)
   (add-new-board-state!)
-  (set! floating-puyos (find-floating-puyos))
+  (set-floating-puyos!)
   (switch-game-mode! 'evaluating))
 
 
