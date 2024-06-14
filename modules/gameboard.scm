@@ -7,19 +7,22 @@
   #:use-module (dom canvas)
   #:use-module (gamestate)
   #:use-module (math)
+  #:use-module (math rect)
   #:use-module (images)
   #:use-module (puyo)
+  #:use-module (stdlib list)
   #:export (build-gameboard
             board-vector-length
             board-grid-width
             set-gameboard!
             draw-gameboard
+            floating-puyos
+            set-falling-puyos!
             add-puyo-at
             create-puyo-sprite-at
             remove-puyo-at
             on-same-level?
-            space-empty?
-            floating-puyo?))
+            space-empty?))
 
 (define play-border-x 100)
 (define play-border-y 68)
@@ -30,6 +33,8 @@
 (define grid-origin-x (+ play-border-x 9))
 (define grid-origin-y (+ play-border-y 8))
 (define board-vector-length (* board-grid-width board-grid-height))
+(define falling-puyos '())
+
 
 (define (grid-index x y)
   (+ x (* y board-grid-width)))
@@ -52,6 +57,11 @@
 (define (remove-puyo-at index)
   (vector-set! (get-game-grid) index 'empty))
 
+(define (set-falling-puyos!)
+  (let* ((board-indices (range 0 board-vector-length))
+         (falling-puyo-indices (filter floating-puyo? board-indices)))
+    (set! falling-puyos (map create-puyo-sprite-at falling-puyo-indices))
+    (for-each remove-puyo-at falling-puyo-indices)))
 
 (define (draw-play-border context)
   (draw-image context image:play-border
@@ -81,10 +91,17 @@
     active-pair-index2
     (cdr (get-active-pair))))
 
+(define (draw-falling-puyos context)
+  (define (draw-func puyo)
+    (let ((hitbox (puyo-hitbox puyo)))
+      (draw-puyo context (puyo-color puyo) (rect-x hitbox) (rect-y hitbox))))
+  (for-each draw-func falling-puyos))
+
 
 (define (draw-gameboard context)
   (draw-play-border context)
   (draw-grid context)
+  (draw-falling-puyos context)
   (draw-active-pair context))
 
 (define (space-empty? index)
