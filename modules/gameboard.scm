@@ -16,7 +16,7 @@
             board-grid-width
             set-gameboard!
             draw-gameboard
-            floating-puyos
+            falling-puyos
             set-falling-puyos!
             add-puyo-at
             create-puyo-sprite-at

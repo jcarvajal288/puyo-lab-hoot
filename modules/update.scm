@@ -9,13 +9,16 @@
   #:use-module (stdlib list)
   #:use-module (gameboard)
   #:use-module (gamestate)
+  #:use-module (puyo)
   #:export (move-active-pair!
             start-board-evaluation!
             progress-evaluation!))
 
-(define (move hitbox velocity)
-  (set-rect-x! hitbox (+ (rect-x hitbox) (vec2-x velocity)))
-  (set-rect-y! hitbox (+ (rect-y hitbox) (vec2-y velocity))))
+(define puyo-falling-speed 4)
+
+(define (fall puyo)
+  (let ((hitbox (puyo-hitbox puyo)))
+    (set-rect-y! hitbox (+ (rect-y hitbox) puyo-falling-speed))))
 
 (define (move-active-pair! direction)
   (if (eqv? current-game-mode 'moving)
@@ -128,4 +131,6 @@
 
 
 (define (progress-evaluation!)
-  (switch-mode-to-moving!))
+  (for-each fall falling-puyos)
+  (if (= (length falling-puyos) 0)
+      (switch-mode-to-moving!)))
