@@ -124,8 +124,8 @@
 (define (start-board-evaluation!)
   (add-new-board-state!)
   (set-falling-puyos!)
-  (switch-game-mode! 'evaluating))
+  (switch-mode-to-evaluating!))
 
 
 (define (progress-evaluation!)
-  (switch-game-mode! 'moving))
+  (switch-mode-to-moving!))

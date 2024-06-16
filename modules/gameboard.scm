@@ -102,7 +102,8 @@
   (draw-play-border context)
   (draw-grid context)
   (draw-falling-puyos context)
-  (draw-active-pair context))
+  (if (eqv? current-game-mode 'moving)
+      (draw-active-pair context)))
 
 (define (space-empty? index)
   (eqv? (vector-ref (get-game-grid) index) 'empty))

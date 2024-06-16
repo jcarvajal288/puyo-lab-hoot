@@ -5,13 +5,14 @@
   #:export (initialize-game-state
             revert-board-state!
             current-game-mode
-            switch-game-mode!
             get-game-grid
             active-pair-index1
             active-pair-index2
             get-active-pair
             set-active-pair-location!
-            add-new-board-state!))
+            add-new-board-state!
+            switch-mode-to-moving!
+            switch-mode-to-evaluating!))
 
 (define current-game-mode 'moving)
 (define current-state 0)
@@ -32,9 +33,6 @@
       (set! current-state (- current-state 1)))
   (set! active-pair-index1 1)
   (set! active-pair-index2 2))
-
-(define (switch-game-mode! game-mode)
-  (set! current-game-mode game-mode))
 
 (define (get-game-grid)
   (vector-ref grid-timeline current-state))
@@ -65,3 +63,9 @@
   (update-board!)
   (new-active-pair!)
   (set! current-state (+ current-state 1)))
+
+(define(switch-mode-to-evaluating!)
+  (set! current-game-mode 'evaluating))
+
+(define (switch-mode-to-moving!)
+  (set! current-game-mode 'moving))
