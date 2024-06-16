@@ -6,7 +6,7 @@
   #:use-module (dom event)
   #:use-module (math vector)
   #:use-module (gamestate)
-  #:use-module (move)
+  #:use-module (update)
   #:export (on-key-down))
 
 (define key:up "ArrowUp")
