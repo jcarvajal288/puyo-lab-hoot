@@ -14,11 +14,7 @@
             start-board-evaluation!
             progress-evaluation!))
 
-(define puyo-falling-speed 4)
-
-(define (fall puyo)
-  (let ((hitbox (puyo-hitbox puyo)))
-    (set-rect-y! hitbox (+ (rect-y hitbox) puyo-falling-speed))))
+(define puyo-falling-speed 10)
 
 (define (move-active-pair! direction)
   (if (eqv? current-game-mode 'moving)
@@ -129,8 +125,23 @@
   (set-falling-puyos!)
   (switch-mode-to-evaluating!))
 
+(define (fall puyo)
+  (let ((hitbox (puyo-hitbox puyo)))
+    (set-rect-y! hitbox (+ (rect-y hitbox) puyo-falling-speed))))
+
+(define (check-landing puyo)
+  (let* ((hitbox (puyo-hitbox puyo))
+         (current-index (screen-coords-to-grid-index (rect-x hitbox) (rect-y hitbox)))
+         (space-below (+ current-index board-grid-width)))
+    (if (not (empty-space? space-below))
+        (land-puyo! puyo current-index))))
+
+(define (land-puyo! puyo index)
+  (add-puyo-at! (puyo-color puyo) index)
+  (remove-falling-puyo! puyo))
 
 (define (progress-evaluation!)
   (for-each fall falling-puyos)
+  (for-each check-landing falling-puyos)
   (if (= (length falling-puyos) 0)
       (switch-mode-to-moving!)))

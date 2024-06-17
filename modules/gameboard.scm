@@ -11,17 +11,17 @@
   #:use-module (images)
   #:use-module (puyo)
   #:use-module (stdlib list)
-  #:export (build-gameboard
-            board-vector-length
+  #:export (board-vector-length
             board-grid-width
-            set-gameboard!
+            screen-coords-to-grid-index
             draw-gameboard
             falling-puyos
             set-falling-puyos!
-            add-puyo-at
+            remove-falling-puyo!
+            add-puyo-at!
             create-puyo-sprite-at
-            remove-puyo-at
             on-same-level?
+            empty-space?
             space-empty?))
 
 (define play-border-x 100)
@@ -36,9 +36,6 @@
 (define falling-puyos '())
 
 
-(define (grid-index x y)
-  (+ x (* y board-grid-width)))
-
 (define (grid-index-to-screen-coords index)
   (let* ((grid-x (floor-remainder index board-grid-width))
          (grid-y (floor-quotient index board-grid-width))
@@ -46,22 +43,33 @@
          (screen-y (+ (* grid-y puyo-size) grid-origin-y)))
     (cons screen-x screen-y)))
 
+(define (screen-coords-to-grid-index x y)
+  (let ((grid-x (floor/ (- x grid-origin-x) puyo-size))
+        (grid-y (floor/ (- y grid-origin-y) puyo-size)))
+    (exact (+ grid-x (* grid-y board-grid-width)))))
+
 (define (get-puyo-at i)
   (vector-ref (get-game-grid) i))
 
-;; deprecated; kept around for testing
-(define (add-puyo-at puyo-color x y)
-  (let ((target-index (grid-index x y)))
-    (vector-set! (get-game-grid) target-index puyo-color)))
+(define (add-puyo-at! puyo-color index)
+  (vector-set! (get-game-grid) index puyo-color))
 
-(define (remove-puyo-at index)
+(define (remove-puyo-at! index)
   (vector-set! (get-game-grid) index 'empty))
 
 (define (set-falling-puyos!)
   (let* ((board-indices (range 0 board-vector-length))
          (falling-puyo-indices (filter floating-puyo? board-indices)))
     (set! falling-puyos (map create-puyo-sprite-at falling-puyo-indices))
-    (for-each remove-puyo-at falling-puyo-indices)))
+    (for-each remove-puyo-at! falling-puyo-indices)))
+
+(define (remove-falling-puyo! this-puyo)
+  (define (not-this-puyo that-puyo)
+    (let ((this-hitbox (puyo-hitbox this-puyo))
+          (that-hitbox (puyo-hitbox that-puyo)))
+      (not (and (= (rect-x this-hitbox) (rect-x that-hitbox))
+                (= (rect-y this-hitbox) (rect-y that-hitbox))))))
+  (set! falling-puyos (filter not-this-puyo falling-puyos)))
 
 (define (draw-play-border context)
   (draw-image context image:play-border
@@ -111,11 +119,14 @@
 (define (on-same-level? s d)
   (= (floor/ s board-grid-width) (floor/ d board-grid-width)))
 
+(define (empty-space? index)
+  (and (< index board-vector-length)
+       (space-empty? index)))
+
 (define (floating-puyo? index)
   (let ((space-below (+ index board-grid-width)))
     (and (not (eqv? (get-puyo-at index) 'empty))
-         (< space-below board-vector-length)
-         (space-empty? space-below))))
+         (empty-space? space-below))))
 
 (define (create-puyo-sprite-at index)
   (let ((screen-coords (grid-index-to-screen-coords index))
