@@ -18,10 +18,7 @@
             falling-puyos
             find-falling-puyos!
             remove-falling-puyo!
-            left-neighbor
-            right-neighbor
-            down-neighbor
-            up-neighbor
+            get-puyo-at
             add-puyo-at!
             create-puyo-sprite-at
             on-same-level?
@@ -38,18 +35,6 @@
 (define grid-origin-y (+ play-border-y 8))
 (define board-vector-length (* board-grid-width board-grid-height))
 (define falling-puyos '())
-
-(define (left-neighbor i)
-  (- i 1))
-
-(define (right-neighbor i)
-  (+ i 1))
-
-(define (up-neighbor i)
-  (- i board-grid-width))
-
-(define (down-neighbor i)
-  (+ i board-grid-width))
 
 
 (define (grid-index-to-screen-coords index)
@@ -129,6 +114,7 @@
   (if (eqv? current-game-mode 'moving)
       (draw-active-pair context)))
 
+;; FIX space-empty vs empty-space
 (define (space-empty? index)
   (eqv? (vector-ref (get-game-grid) index) 'empty))
 

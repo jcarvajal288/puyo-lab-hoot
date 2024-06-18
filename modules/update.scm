@@ -16,6 +16,20 @@
 
 (define puyo-falling-speed 10)
 
+
+(define (left-neighbor i)
+  (- i 1))
+
+(define (right-neighbor i)
+  (+ i 1))
+
+(define (up-neighbor i)
+  (- i board-grid-width))
+
+(define (down-neighbor i)
+  (+ i board-grid-width))
+
+
 (define (move-active-pair! direction)
   (if (eqv? current-game-mode 'moving)
     (let* ((i1 active-pair-index1)
@@ -141,11 +155,30 @@
   (remove-falling-puyo! puyo))
 
 
-(define (find-scoring-groups) '())
+(define (find-scoring-groups)
+  (let ((occupied-spaces (filter (lambda (i)
+                                   (not (empty-space? i)))
+                                 (range 0 board-vector-length))))
+    ;(foldl find-group '() occupied-spaces)))
+    (display occupied-spaces) (newline) (flush-output-port)
+    (map get-neighbor-indices-for-index occupied-spaces)))
+
+(define (find-group groups remaining-indices)
+  (let* ((this-index (car remaining-indices))
+         (this-color (get-puyo-at this-index))
+         (neighbors (get-neighbor-indices-for-index this-index)))
+         ;(group-members (find-group-members neighbors)))
+    (display neighbors)))
+
+(define (get-neighbor-indices-for-index index)
+  (list (left-neighbor index)
+        (right-neighbor index)
+        (up-neighbor index)
+        (down-neighbor index)))
 
 (define (score-groups! groups)
   (display "Scoring groups: ")
-  (display (length groups))
+  (display groups)
   (newline)
   (flush-output-port))
 

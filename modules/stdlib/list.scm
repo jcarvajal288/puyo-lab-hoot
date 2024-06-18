@@ -1,7 +1,11 @@
 (define-module (stdlib list)
   #:pure
   #:use-module (scheme base)
-  #:export (filter range))
+  #:use-module (scheme write)
+  #:export (filter
+            range
+            empty?
+            foldl))
 
 (define (filter fn lst)
   (cond ((null? lst) '())
@@ -14,3 +18,13 @@
   (if (>= min max)
       '()
       (cons min (range (+ min 1) max))))
+
+(define (empty? lst)
+  (= (length lst) 0))
+
+(define (foldl fn initial lst)
+  (display lst) (newline) (flush-output-port)
+  (if (empty? lst)
+      initial
+      (fn (car lst)
+          (foldl fn initial (cdr lst)))))
