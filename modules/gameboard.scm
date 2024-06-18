@@ -16,7 +16,7 @@
             screen-coords-to-grid-index
             draw-gameboard
             falling-puyos
-            set-falling-puyos!
+            find-falling-puyos!
             remove-falling-puyo!
             add-puyo-at!
             create-puyo-sprite-at
@@ -57,7 +57,7 @@
 (define (remove-puyo-at! index)
   (vector-set! (get-game-grid) index 'empty))
 
-(define (set-falling-puyos!)
+(define (find-falling-puyos!)
   (let* ((board-indices (range 0 board-vector-length))
          (falling-puyo-indices (filter floating-puyo? board-indices)))
     (set! falling-puyos (map create-puyo-sprite-at falling-puyo-indices))

@@ -122,7 +122,7 @@
 
 (define (start-board-evaluation!)
   (add-new-board-state!)
-  (set-falling-puyos!)
+  (find-falling-puyos!)
   (switch-mode-to-evaluating!))
 
 (define (fall puyo)
@@ -140,8 +140,20 @@
   (add-puyo-at! (puyo-color puyo) index)
   (remove-falling-puyo! puyo))
 
+
+(define (find-scoring-groups) '())
+
+(define (score-groups! groups)
+  (display "Scoring groups: ")
+  (display (length groups))
+  (newline)
+  (flush-output-port))
+
 (define (progress-evaluation!)
   (for-each fall falling-puyos)
   (for-each check-landing falling-puyos)
   (if (= (length falling-puyos) 0)
-      (switch-mode-to-moving!)))
+      (let ((scoring-groups (find-scoring-groups)))
+        (if (> (length scoring-groups) 0)
+            (score-groups! scoring-groups)
+            (switch-mode-to-moving!)))))
