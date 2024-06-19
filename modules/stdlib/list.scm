@@ -5,7 +5,8 @@
   #:export (filter
             range
             empty?
-            foldl))
+            foldl
+            contains?))
 
 (define (filter fn lst)
   (cond ((null? lst) '())
@@ -23,8 +24,13 @@
   (= (length lst) 0))
 
 (define (foldl fn initial lst)
+  (display "fold: ")
   (display lst) (newline) (flush-output-port)
   (if (empty? lst)
       initial
-      (fn (car lst)
-          (foldl fn initial (cdr lst)))))
+      (foldl fn (fn initial (car lst)) (cdr list))))
+      ;; (fn (car lst)
+      ;;     (foldl fn initial (cdr lst)))))
+
+(define (contains? lst obj)
+  (not (not (memq obj lst))))

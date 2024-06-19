@@ -1,5 +1,6 @@
 (import (scheme base)
         (scheme inexact)
+        (scheme write)
         (hoot debug)
         (hoot ffi)
         (math)
