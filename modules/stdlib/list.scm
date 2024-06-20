@@ -6,7 +6,8 @@
             range
             empty?
             foldl
-            contains?))
+            contains?
+            get-longest-sublist))
 
 (define (filter fn lst)
   (cond ((null? lst) '())
@@ -29,8 +30,16 @@
   (if (empty? lst)
       initial
       (foldl fn (fn initial (car lst)) (cdr list))))
-      ;; (fn (car lst)
-      ;;     (foldl fn initial (cdr lst)))))
 
 (define (contains? lst obj)
   (not (not (memq obj lst))))
+
+(define (get-longest-sublist lists)
+  (define (reducer current-longest lists)
+    (cond ((empty? lists)
+            current-longest)
+          ((> (length (car lists)) (length current-longest))
+            (reducer (car lists) (cdr lists)))
+          (else
+            (reducer current-longest (cdr lists)))))
+  (reducer '() lists))

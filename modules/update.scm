@@ -174,10 +174,13 @@
                                     same-color-neighbors)))
     (if (empty? not-already-found)
         group
-        (let ((new-group (append not-already-found group)))
-          (append (map (lambda (space)
-                         (find-group new-group space))
-                       not-already-found))))))
+        (let* ((new-group (append not-already-found group))
+               (other-groups (map (lambda (space)
+                                   (find-group new-group space))
+                                  not-already-found)))
+          ;(display "new-group: ")(display new-group) (newline)
+          (display "other-groups: ")(display other-groups) (newline) (flush-output-port)
+          (get-longest-sublist other-groups)))))
 
 
 (define (find-same-color-neighbors space color)
