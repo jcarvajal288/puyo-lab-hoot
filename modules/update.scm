@@ -162,10 +162,12 @@
         (let* ((next-space (car spaces-left))
                (new-group (find-group (list next-space) next-space)))
           (find-groups (append (list new-group) groups) (cdr spaces-left)))))
-  (let ((occupied-spaces (filter (lambda (i)
+  (let* ((occupied-spaces (filter (lambda (i)
                                    (not (empty-space? i)))
-                                 (range 0 board-vector-length))))
-    (find-groups '() occupied-spaces)))
+                                 (range 0 board-vector-length)))
+         (same-color-groups (remove-duplicates (find-groups '() occupied-spaces))))
+    (filter (lambda (g) (>= (length g) 4))
+            same-color-groups)))
 
 (define (find-group group this-space)
   (let* ((this-color (get-puyo-at this-space))
@@ -178,8 +180,6 @@
                (other-groups (map (lambda (space)
                                    (find-group new-group space))
                                   not-already-found)))
-          ;(display "new-group: ")(display new-group) (newline)
-          (display "other-groups: ")(display other-groups) (newline) (flush-output-port)
           (get-longest-sublist other-groups)))))
 
 
@@ -194,6 +194,32 @@
                      (eqv? color (get-puyo-at n))))
                  neighbors)))
 
+(define (remove-duplicates groups)
+  (define (same-list? g1 g2)
+    (and (= (length g1) (length g2))
+         (= (apply + g1) (apply + g2))))
+
+  (define (is-car-unique? groups)
+    (if (<= (length groups) 1)
+        groups
+        (let ((boolean-array (map (lambda (g)
+                        (same-list? (car groups) g))
+                      (cdr groups))))
+          (none? boolean-array))))
+
+  (define (reducer unique-groups groups)
+    (cond
+      ((empty? groups)
+        unique-groups)
+      ((is-car-unique? groups)
+        (reducer (append (list (car groups)) unique-groups) (cdr groups)))
+      (else
+        (reducer unique-groups (cdr groups)))))
+
+  (let ((unique-groups '()))
+    (reducer unique-groups groups)))
+
+
 (define (score-groups! groups)
   (display "Scoring groups: ")
   (display groups)
@@ -205,7 +231,6 @@
   (for-each check-landing falling-puyos)
   (if (empty? falling-puyos)
       (let ((scoring-groups (find-scoring-groups)))
-        (if (not (empty? scoring-groups))
-            (begin
-              (score-groups! scoring-groups)
-              (switch-mode-to-moving!))))))
+        (if (empty? scoring-groups)
+            (switch-mode-to-moving!)
+            (score-groups! scoring-groups)))))
