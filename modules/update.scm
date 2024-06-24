@@ -221,10 +221,8 @@
 
 
 (define (score-groups! groups)
-  (display "Scoring groups: ")
-  (display groups)
-  (newline)
-  (flush-output-port))
+  (display "Scoring groups: ") (display groups) (newline) (flush-output-port)
+  (remove-puyo-groups! groups))
 
 (define (progress-evaluation!)
   (for-each fall falling-puyos)

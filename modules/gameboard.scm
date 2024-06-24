@@ -18,6 +18,7 @@
             falling-puyos
             find-falling-puyos!
             remove-falling-puyo!
+            remove-puyo-groups!
             get-puyo-at
             add-puyo-at!
             create-puyo-sprite-at
@@ -57,6 +58,11 @@
 
 (define (remove-puyo-at! index)
   (vector-set! (get-game-grid) index 'empty))
+
+(define (remove-puyo-groups! groups)
+  (for-each (lambda (group)
+              (for-each remove-puyo-at! group))
+            groups))
 
 (define (find-falling-puyos!)
   (let* ((board-indices (range 0 board-vector-length))
