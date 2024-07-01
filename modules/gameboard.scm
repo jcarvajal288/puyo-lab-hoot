@@ -2,7 +2,6 @@
   #:pure
   #:use-module (scheme base)
   #:use-module (scheme write)
-  #:use-module (hoot match)
   #:use-module (dom image)
   #:use-module (dom canvas)
   #:use-module (gamestate)
@@ -11,6 +10,7 @@
   #:use-module (images)
   #:use-module (puyo)
   #:use-module (stdlib list)
+  #:use-module (stdlib debug)
   #:export (board-vector-length
             board-grid-width
             screen-coords-to-grid-index
@@ -65,10 +65,16 @@
             groups))
 
 (define (find-falling-puyos!)
-  (let* ((board-indices (range 0 board-vector-length))
-         (falling-puyo-indices (filter floating-puyo? board-indices)))
-    (set! falling-puyos (map create-puyo-sprite-at falling-puyo-indices))
-    (for-each remove-puyo-at! falling-puyo-indices)))
+  (define (reducer temp-falling-puyos)
+    (let* ((board-indices (range 0 board-vector-length))
+           (falling-puyo-indices (filter floating-puyo? board-indices)))
+      (if (empty? falling-puyo-indices)
+          temp-falling-puyos
+          (begin
+            (set! falling-puyos (append falling-puyos (map create-puyo-sprite-at falling-puyo-indices)))
+            (for-each remove-puyo-at! falling-puyo-indices)
+            (reducer (append falling-puyo-indices temp-falling-puyos))))))
+  (reducer '()))
 
 (define (remove-falling-puyo! this-puyo)
   (define (not-this-puyo that-puyo)

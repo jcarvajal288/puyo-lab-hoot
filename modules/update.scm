@@ -7,6 +7,7 @@
   #:use-module (math rect)
   #:use-module (math vector)
   #:use-module (stdlib list)
+  #:use-module (stdlib debug)
   #:use-module (gameboard)
   #:use-module (gamestate)
   #:use-module (puyo)
@@ -221,14 +222,15 @@
 
 
 (define (score-groups! groups)
-  (display "Scoring groups: ") (display groups) (newline) (flush-output-port)
   (remove-puyo-groups! groups))
 
 (define (progress-evaluation!)
   (for-each fall falling-puyos)
   (for-each check-landing falling-puyos)
   (if (empty? falling-puyos)
-      (let ((scoring-groups (find-scoring-groups)))
-        (if (empty? scoring-groups)
-            (switch-mode-to-moving!)
-            (score-groups! scoring-groups)))))
+      (find-falling-puyos!))
+  (if (empty? falling-puyos)
+    (let ((scoring-groups (find-scoring-groups)))
+      (if (empty? scoring-groups)
+          (switch-mode-to-moving!)
+          (score-groups! scoring-groups)))))
