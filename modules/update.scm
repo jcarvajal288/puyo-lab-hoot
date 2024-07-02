@@ -163,6 +163,31 @@
         (let* ((next-space (car spaces-left))
                (new-group (find-group (list next-space) next-space)))
           (find-groups (append (list new-group) groups) (cdr spaces-left)))))
+
+  (define (find-group group this-space)
+    (let* ((this-color (get-puyo-at this-space))
+          (same-color-neighbors (find-same-color-neighbors this-space this-color))
+          (not-already-found (filter (lambda (n) (not (contains? group n)))
+                                      same-color-neighbors)))
+      (if (empty? not-already-found)
+          group
+          (let* ((new-group (append not-already-found group))
+                (other-groups (map (lambda (space)
+                                    (find-group new-group space))
+                                    not-already-found)))
+            (get-longest-sublist other-groups)))))
+
+  (define (find-same-color-neighbors space color)
+    (let ((neighbors (list (left-neighbor space)
+                          (right-neighbor space)
+                          (up-neighbor space)
+                          (down-neighbor space))))
+          (filter (lambda (n)
+                    (and
+                      (< n board-vector-length)
+                      (eqv? color (get-puyo-at n))))
+                  neighbors)))
+
   (let* ((occupied-spaces (filter (lambda (i)
                                    (not (empty-space? i)))
                                  (range 0 board-vector-length)))
@@ -170,30 +195,6 @@
     (filter (lambda (g) (>= (length g) 4))
             same-color-groups)))
 
-(define (find-group group this-space)
-  (let* ((this-color (get-puyo-at this-space))
-         (same-color-neighbors (find-same-color-neighbors this-space this-color))
-         (not-already-found (filter (lambda (n) (not (contains? group n)))
-                                    same-color-neighbors)))
-    (if (empty? not-already-found)
-        group
-        (let* ((new-group (append not-already-found group))
-               (other-groups (map (lambda (space)
-                                   (find-group new-group space))
-                                  not-already-found)))
-          (get-longest-sublist other-groups)))))
-
-
-(define (find-same-color-neighbors space color)
-  (let ((neighbors (list (left-neighbor space)
-                         (right-neighbor space)
-                         (up-neighbor space)
-                         (down-neighbor space))))
-         (filter (lambda (n)
-                   (and
-                     (< n board-vector-length)
-                     (eqv? color (get-puyo-at n))))
-                 neighbors)))
 
 (define (remove-duplicates groups)
   (define (same-list? g1 g2)
