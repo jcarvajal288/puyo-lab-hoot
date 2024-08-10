@@ -34,8 +34,8 @@
 
 (define (move-active-pair! direction)
   (if (eqv? current-game-mode 'moving)
-    (let* ((i1 active-pair-index1)
-          (i2 active-pair-index2)
+    (let* ((i1 active-pair-position1)
+          (i2 active-pair-position2)
           (move-result (match direction
                           ('left (move-active-pair-left i1 i2))
                           ('right (move-active-pair-right i1 i2))

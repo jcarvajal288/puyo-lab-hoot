@@ -105,11 +105,11 @@
 (define (draw-active-pair context)
   (draw-puyo-at-board-index
     context
-    active-pair-index1
+    active-pair-position1
     (car (get-active-pair)))
   (draw-puyo-at-board-index
     context
-    active-pair-index2
+    active-pair-position2
     (cdr (get-active-pair))))
 
 (define (draw-falling-puyos context)
