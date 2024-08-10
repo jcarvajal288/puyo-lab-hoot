@@ -224,8 +224,12 @@
 
 
 (define (score-groups! groups)
-  (set-last-chain! (length groups))
+  (increment-chain-counter!)
   (remove-puyo-groups! groups))
+
+(define (finalize-evaluation!)
+  (update-chain-stats!)
+  (switch-mode-to-moving!))
 
 (define (progress-evaluation!)
   (for-each fall falling-puyos)
@@ -235,5 +239,5 @@
   (if (empty? falling-puyos)
     (let ((scoring-groups (find-scoring-groups)))
       (if (empty? scoring-groups)
-          (switch-mode-to-moving!)
+          (finalize-evaluation!)
           (score-groups! scoring-groups)))))
