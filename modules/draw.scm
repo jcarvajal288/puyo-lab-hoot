@@ -7,6 +7,7 @@
   #:use-module (math)
   #:use-module (images)
   #:use-module (screen)
+  #:use-module (stats)
   #:use-module (gameboard)
   #:export (draw-frame))
 
@@ -18,4 +19,5 @@
 
 (define (draw-frame context prev-time)
   (draw-background context)
-  (draw-gameboard context))
+  (draw-gameboard context)
+  (draw-stats context))
