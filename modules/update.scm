@@ -11,6 +11,7 @@
   #:use-module (gameboard)
   #:use-module (gamestate)
   #:use-module (puyo)
+  #:use-module (stats)
   #:export (move-active-pair!
             start-board-evaluation!
             progress-evaluation!))
@@ -223,6 +224,7 @@
 
 
 (define (score-groups! groups)
+  (set-last-chain! (length groups))
   (remove-puyo-groups! groups))
 
 (define (progress-evaluation!)
