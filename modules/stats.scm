@@ -10,6 +10,6 @@
 
 (define (draw-stats context)
   (set-fill-color! context "#FFFFFF")
-  (set-font! context "bold 24px monospace")
+  (set-font! context "24px Eraser")
   (set-text-align! context "left")
   (fill-text context "MAX CHAIN:" stats-x stats-y))
